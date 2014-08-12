@@ -25,6 +25,7 @@ typedef struct queueObj
 
 void qInsert(queueObj_t *qObj, void *data);
 void qRemove(queueObj_t *qObj, void *data, size_t nSize);
+void qDestroy(queueObj_t *qObj);
 
 
 void printQueue(queueObj_t *qObj);

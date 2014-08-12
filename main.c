@@ -14,6 +14,12 @@ void* work(void *arg)
 	return (NULL);
 }
 
+void* print(void *data)
+{
+	payload_t *t = (payload_t *)data;
+	printf("\n Payload : %s", (char*)t->arg);
+}
+
 int main(void)
 {
 
@@ -32,12 +38,25 @@ int main(void)
 	p3.func = work;
 	p3.arg  = "SUMEDHA";
 
+	qInit(&q1);
+
 	qInsert(&q1, &p1);
 	qInsert(&q1, &p2);
-	qInsert(&q1, &p2);
+	qInsert(&q1, &p3);
 
 	printf("\nObj Count : %d", q1.qCount);
+	printQ(&q1, print);
+
+	qInsert(&q1, &p2);
+
+	printf("\nBefore Destroy Obj Count : %d", q1.qCount);
+	printQ(&q1, print);
+
+	qDestroy(&q1);
+	printQ(&q1, print);
+	printf("\nAfter Destroy Obj Count : %d", q1.qCount);
 
 	return (0);
 }
+
 

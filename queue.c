@@ -82,3 +82,45 @@ NODE *allocate_node(void *data)
 
 	return (node);
 }
+
+
+void qDestroy(queueObj_t *qObj) {
+
+	if(!qObj) {
+		return;
+	}
+
+	Q_LOCK(&qObj->qMutex);
+	
+	NODE *node = NULL;
+
+	while(qObj->qHead != NULL) {
+
+		node 			= qObj->qHead;
+		qObj->qHead             = qObj->qHead->next;
+
+		FREE(node);
+	}
+
+	qObj->qTail = qObj->qHead = 0;
+
+	Q_UNLOCK(&qObj->qMutex);
+	pthread_mutex_destroy(&qObj->qMutex);
+}
+
+
+void printQ(queueObj_t *qObj, workCB func)
+{
+
+	NODE *node = qObj->qHead;
+
+	if(!node) {
+		return;
+	}
+
+	while(node != NULL) {
+		func(node->data);
+		node = node->next;
+	}
+}
+
