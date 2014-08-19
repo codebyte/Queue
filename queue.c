@@ -14,11 +14,11 @@ void qInit(queueObj_t *qObj)
 
 void qInsert(queueObj_t *qObj, void *data)
 {
-	Q_LOCK(&qObj->qMutex);
-
 	if (!qObj || !data) {	
-		goto end;
+		return;
 	}
+	
+	Q_LOCK(&qObj->qMutex);
 
 	NODE *node = allocate_node(data);
 
@@ -34,8 +34,7 @@ void qInsert(queueObj_t *qObj, void *data)
 		++qObj->qCount;
 	}			
 
-	end:
-		Q_UNLOCK(&qObj->qMutex);
+	Q_UNLOCK(&qObj->qMutex);
 }
 
 void qRemove(queueObj_t *qObj, void *data, size_t nSize)
